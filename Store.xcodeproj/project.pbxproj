@@ -197,6 +197,8 @@
 			dependencies = (
 			);
 			name = Store;
+			packageProductDependencies = (
+			);
 			productName = Store;
 			productReference = 6082627B29658DF40065F9E4 /* Store.app */;
 			productType = "com.apple.product-type.application";
@@ -269,6 +271,8 @@
 				Base,
 			);
 			mainGroup = 6082627229658DF40065F9E4;
+			packageReferences = (
+			);
 			productRefGroup = 6082627C29658DF40065F9E4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
