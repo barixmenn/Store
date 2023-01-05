@@ -7,9 +7,9 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class DetailsViewController: UIViewController {
-    
     let product: Product
     
     lazy var descriptionLabel: UILabel = {
@@ -25,7 +25,19 @@ class DetailsViewController: UIViewController {
         return label
     }()
     
-
+    lazy var deleteProductButton: UIButton = {
+        let button = UIButton(type: .roundedRect)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Delete", for: .normal)
+        return button
+    }()
+    
+    lazy var loadingIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.style = .large
+        return activityIndicatorView
+    }()
+    
     init(product: Product) {
         self.product = product
         super.init(nibName: nil, bundle: nil)
@@ -56,13 +68,35 @@ class DetailsViewController: UIViewController {
         descriptionLabel.text = product.description
         priceLabel.text = product.price.formatAsCurrency()
         
+        // fetch the images
+        Task {
+            loadingIndicatorView.startAnimating()
+            var images: [UIImage] = []
+            for imageURL in (product.images ?? []) {
+                guard let downloadedImage = await ImageLoader.load(url: imageURL) else { return }
+                images.append(downloadedImage)
+            }
+            
+            let productImageListVC = UIHostingController(rootView: ProductImageListView(images: images))
+            guard let productImageListView = productImageListVC.view else { return }
+            stackView.insertArrangedSubview(productImageListView, at: 0)
+            addChild(productImageListVC)
+            productImageListVC.didMove(toParent: self)
+            loadingIndicatorView.stopAnimating()
+            
+        }
+        
+        stackView.addArrangedSubview(loadingIndicatorView)
         stackView.addArrangedSubview(descriptionLabel)
-        stackView.addArrangedSubview(priceLabel)        
+        stackView.addArrangedSubview(priceLabel)
+        stackView.addArrangedSubview(deleteProductButton)
+        
         view.addSubview(stackView)
         
         // adding constraints
         stackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
     }
+    
     
 }
 
