@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
+
 
 class ProductTableViewController: UITableViewController {
     
@@ -59,10 +61,15 @@ class ProductTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath)     
         let product = products[indexPath.row]
         
-        var configuration = cell.defaultContentConfiguration()
-        configuration.text = product.title
-        configuration.secondaryText = product.description
-        cell.contentConfiguration = configuration
+       
+        
+        if #available(iOS 16.0, *) {
+            cell.contentConfiguration = UIHostingConfiguration(content: {
+                ProductCellView(product: product)
+            })
+        } else {
+            // Fallback on earlier versions
+        }
         return cell
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 
 
+@available(iOS 16.0, *)
 class CategoriesTableViewController: UITableViewController {
     
     private var client = StoreHTTPClient()
