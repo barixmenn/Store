@@ -12,9 +12,12 @@ import UIKit
 @available(iOS 16.0, *)
 class CategoriesTableViewController: UITableViewController {
     
+    //MARK: - Properties
     private var client = StoreHTTPClient()
     private var categories: [Category] = []
     
+    
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -28,6 +31,8 @@ class CategoriesTableViewController: UITableViewController {
         }
     }
     
+    
+    //MARK: - Functions
     private func populateCategories() async {
         
         do {
@@ -38,6 +43,7 @@ class CategoriesTableViewController: UITableViewController {
         }
     }
     
+    //MARK: - table view sources
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let category = categories[indexPath.row]
         self.navigationController?.pushViewController(ProductTableViewController(category: category), animated: true)

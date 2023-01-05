@@ -10,8 +10,20 @@ import UIKit
 import SwiftUI
 
 class DetailsViewController: UIViewController {
+    //MARK: - Properties
     let product: Product
     
+    init(product: Product) {
+        self.product = product
+        super.init(nibName: nil, bundle: nil)
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - UI Elements
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -37,17 +49,9 @@ class DetailsViewController: UIViewController {
         activityIndicatorView.style = .large
         return activityIndicatorView
     }()
+  
     
-    init(product: Product) {
-        self.product = product
-        super.init(nibName: nil, bundle: nil)
-        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -55,6 +59,7 @@ class DetailsViewController: UIViewController {
         setupUI()
     }
     
+    //MARK: - Functions 
     private func setupUI() {
         
         let stackView = UIStackView()
