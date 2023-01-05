@@ -10,46 +10,45 @@ import UIKit
 
 
 class CategoriesTableViewController: UITableViewController {
-
-    //MARK: - Properties
+    
     private var client = StoreHTTPClient()
     private var categories: [Category] = []
     
-    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CategoryCell")
-        navigationController?.navigationBar.prefersLargeTitles = true
+        view.backgroundColor = UIColor.white
         title = "Categories"
-
-
+        navigationController?.navigationBar.prefersLargeTitles = true
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CategoryTableViewCell")
+        
         Task {
             await populateCategories()
             tableView.reloadData()
         }
     }
-
-    //MARK: - Functions
     
-    private func populateCategories() async{
+    private func populateCategories() async {
+        
         do {
-            categories =  try await client.getAllCategories()
+            categories = try await client.getAllCategories()
             print(categories)
-        }catch {
-            // Error message
+        } catch {
+            // show error in alert
         }
     }
     
-    
-    
-    //MARK: - Tableview properties
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+        self.navigationController?.pushViewController(ProductTableViewController(category: category), animated: true)
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         categories.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath)
         cell.accessoryType = .disclosureIndicator
         
         let category = categories[indexPath.row]
@@ -74,6 +73,7 @@ class CategoriesTableViewController: UITableViewController {
        
         
         return cell
+        
     }
     
 }
